@@ -12,6 +12,6 @@ composer require neemzy/share-extension
 
 ```twig
 <a href="{{ twitter(my_url, 'Tweet this text') }}">Share on Twitter</a>
-<a href="{{ twitter(my_url) }}">Share on Facebook</a>
-<a href="{{ twitter(my_url, my_media_url) }}">Share on Pinterest</a>
+<a href="{{ facebook(my_url) }}">Share on Facebook</a>
+<a href="{{ pinterest(my_url, my_media_url) }}">Share on Pinterest</a>
 ```
