@@ -2,7 +2,7 @@
 
 namespace ShareExtension;
 
-class ShareExtension/* extends \Twig_Extension*/
+class ShareExtension extends \Twig_Extension
 {
     /**
      * Twig function declarations
