@@ -1,0 +1,23 @@
+{
+    "name": "neemzy/share-extension",
+    "description": "Twig extension providing social share links",
+    "minimum-stability": "dev",
+
+    "authors": [
+        {
+            "name": "neemzy",
+            "email": "tom.panier@free.fr"
+        }
+    ],
+
+    "require": {
+        "php": ">=5.3.0",
+        "twig/twig": ">=1.8,<2.0-dev"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "ShareExtension\\": "src/"
+        }
+    }
+}
