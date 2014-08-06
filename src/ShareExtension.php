@@ -5,7 +5,19 @@ namespace ShareExtension;
 class ShareExtension extends \Twig_Extension
 {
     /**
+     * Twig extension name
+     *
+     * @return string Extension name
+     */
+    public function getName()
+    {
+        return 'share-extension';
+    }
+
+    /**
      * Twig function declarations
+     *
+     * @return array Twig instances
      */
     public function getFunctions()
     {
