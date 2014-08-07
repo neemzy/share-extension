@@ -22,9 +22,9 @@ class ShareExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            new Twig_SimpleFunction('twitter', 'getTwitterLink'),
-            new Twig_SimpleFunction('facebook', 'getFacebookLink'),
-            new Twig_SimpleFunction('pinterest', 'getPinterestLink')
+            new \Twig_SimpleFunction('twitter', 'getTwitterLink'),
+            new \Twig_SimpleFunction('facebook', 'getFacebookLink'),
+            new \Twig_SimpleFunction('pinterest', 'getPinterestLink')
         );
     }
 
