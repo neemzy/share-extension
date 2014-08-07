@@ -33,8 +33,8 @@ class ShareExtension extends \Twig_Extension
     /**
      * Crafts Twitter link
      *
-     * @param $url  string URL to share
-     * @param $text string Text to add to the tweet
+     * @param string $url  URL to share
+     * @param string $text Text to add to the tweet
      *
      * @return <a href="..."> content
      */
@@ -48,7 +48,7 @@ class ShareExtension extends \Twig_Extension
     /**
      * Crafts Facebook link
      *
-     * @param $url  string URL to share
+     * @param string $url URL to share
      *
      * @return <a href="..."> content
      */
@@ -62,8 +62,8 @@ class ShareExtension extends \Twig_Extension
     /**
      * Crafts Pinterest link
      *
-     * @param $url   string URL to share
-     * @param $media string Media URL
+     * @param string $url   URL to share
+     * @param string $media Media URL
      *
      * @return <a href="..."> content
      */
