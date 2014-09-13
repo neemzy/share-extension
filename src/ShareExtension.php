@@ -14,6 +14,8 @@ class ShareExtension extends \Twig_Extension
         return 'share-extension';
     }
 
+
+
     /**
      * Twig function declarations
      *
@@ -22,10 +24,26 @@ class ShareExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('twitter', 'getTwitterLink'),
-            new \Twig_SimpleFunction('facebook', 'getFacebookLink'),
-            new \Twig_SimpleFunction('pinterest', 'getPinterestLink')
+            new \Twig_SimpleFunction('twitter', [$this, 'getTwitterLink'], ['is_safe' => ['all']]),
+            new \Twig_SimpleFunction('facebook', [$this, 'getFacebookLink'], ['is_safe' => ['all']]),
+            new \Twig_SimpleFunction('pinterest', [$this, 'getPinterestLink'], ['is_safe' => ['all']]),
+            new \Twig_SimpleFunction('tumblr', [$this, 'getTumblrLink'], ['is_safe' => ['all']])
         );
+    }
+
+
+
+    /**
+     * Appends onclick handler to the link to make it open a popup
+     *
+     * @param int $width Pop-up width
+     * @param int $height Pop-up height
+     *
+     * @return string HTML to append to the link
+     */
+    private function appendHandler($width, $height)
+    {
+        return '" onclick="window.open(this.href, \'\', \'directories=no,location=no,menubar=no,resizable=no,scrollbars=no,status=no,toolbar=no,width='.$width.',height='.$height.'\'); return false;';
     }
 
 
@@ -34,13 +52,13 @@ class ShareExtension extends \Twig_Extension
      * Crafts Twitter link
      *
      * @param string $url  URL to share
-     * @param string $text Text to add to the tweet
+     * @param string $text Text to add
      *
-     * @return <a href="..."> content
+     * @return string <a href="..."> content
      */
     public function getTwitterLink($url, $text = '')
     {
-        return 'http://twitter.com/share?url='.rawurlencode($url).'&amp;text='.rawurlencode($text).'" onclick="window.open(this.href, \'\', \'directories=no,location=no,menubar=no,resizable=no,scrollbars=no,status=no,toolbar=no,width=640,height=435\'); return false;';
+        return 'http://twitter.com/share?url='.rawurlencode($url).'&amp;text='.rawurlencode($text).$this->appendHandler(640, 435);
     }
 
 
@@ -50,11 +68,11 @@ class ShareExtension extends \Twig_Extension
      *
      * @param string $url URL to share
      *
-     * @return <a href="..."> content
+     * @return string <a href="..."> content
      */
     public function getFacebookLink($url)
     {
-        return 'http://www.facebook.com/sharer/sharer.php?u='.rawurlencode($url).'" onclick="window.open(this.href, \'\', \'directories=no,location=no,menubar=no,resizable=no,scrollbars=no,status=no,toolbar=no,width=640,height=350\'); return false;';
+        return 'http://www.facebook.com/sharer/sharer.php?u='.rawurlencode($url).$this->appendHandler(640, 350);
     }
 
 
@@ -65,10 +83,25 @@ class ShareExtension extends \Twig_Extension
      * @param string $url   URL to share
      * @param string $media Media URL
      *
-     * @return <a href="..."> content
+     * @return string <a href="..."> content
      */
     public function getPinterestLink($url, $media)
     {
-        return 'http://pinterest.com/pin/create/button/?url='.rawurlencode($url).'&amp;media='.rawurlencode($media).'" onclick="window.open(this.href, \'\', \'directories=no,location=no,menubar=no,resizable=no,scrollbars=no,status=no,toolbar=no,width=750,height=316\'); return false;';
+        return 'http://pinterest.com/pin/create/button/?url='.rawurlencode($url).'&amp;media='.rawurlencode($media).$this->appendHandler(750, 316);
+    }
+
+
+
+    /**
+     * Crafts Tumblr link
+     *
+     * @param string $url  URL to share
+     * @param string $text Text to add
+     *
+     * @return string <a href="..."> content
+     */
+    public function getTumblrLink($url, $text = '')
+    {
+        return 'http://tumblr.com/share?s&v=3&u='.rawurlencode($url).'&t='.$text.$this->appendHandler(640, 435);
     }
 }
