@@ -27,7 +27,8 @@ class ShareExtension extends \Twig_Extension
             new \Twig_SimpleFunction('twitter', [$this, 'getTwitterLink'], ['is_safe' => ['all']]),
             new \Twig_SimpleFunction('facebook', [$this, 'getFacebookLink'], ['is_safe' => ['all']]),
             new \Twig_SimpleFunction('pinterest', [$this, 'getPinterestLink'], ['is_safe' => ['all']]),
-            new \Twig_SimpleFunction('tumblr', [$this, 'getTumblrLink'], ['is_safe' => ['all']])
+            new \Twig_SimpleFunction('tumblr', [$this, 'getTumblrLink'], ['is_safe' => ['all']]),
+            new \Twig_SimpleFunction('googleplus', [$this, 'getGooglePlusLink'], ['is_safe' => ['all']])
         );
     }
 
@@ -104,5 +105,21 @@ class ShareExtension extends \Twig_Extension
     public function getTumblrLink($url, $title = '', $description = '')
     {
         return 'http://www.tumblr.com/share/link?url='.rawurlencode($url).'&amp;name='.$title.'&amp;description='.$description.$this->appendHandler(640, 435);
+    }
+
+
+
+    /**
+     * Crafts Google+ link
+     *
+     * @param string $url         URL to share
+     * @param string $title       Title to use
+     * @param string $description Description to use
+     *
+     * @return string <a href="..."> content
+     */
+    public function getGooglePlusLink($url, $title = '', $description = '')
+    {
+        return 'https://plus.google.com/share?url='.rawurlencode($url).$this->appendHandler(640, 360);
     }
 }
