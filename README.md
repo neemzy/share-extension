@@ -14,5 +14,6 @@ composer require neemzy/share-extension
 <a href="{{ twitter(my_url, 'Some text') }}">Share on Twitter</a>
 <a href="{{ facebook(my_url) }}">Share on Facebook</a>
 <a href="{{ pinterest(my_url, my_media_url) }}">Share on Pinterest</a>
-<a href="{{ tumblr(my_url, 'Some text') }}">Share on Pinterest</a>
+<a href="{{ tumblr(my_url, 'Some title', 'Some description') }}">Share on Tumblr</a>
+<a href="{{ googleplus(my_url) }}">Share on Google+</a>
 ```
