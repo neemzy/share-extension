@@ -36,7 +36,7 @@ class ShareExtension extends \Twig_Extension
     /**
      * Appends onclick handler to the link to make it open a popup
      *
-     * @param int $width Pop-up width
+     * @param int $width  Pop-up width
      * @param int $height Pop-up height
      *
      * @return string HTML to append to the link
@@ -52,7 +52,7 @@ class ShareExtension extends \Twig_Extension
      * Crafts Twitter link
      *
      * @param string $url  URL to share
-     * @param string $text Text to add
+     * @param string $text Text to tweet
      *
      * @return string <a href="..."> content
      */
@@ -95,13 +95,14 @@ class ShareExtension extends \Twig_Extension
     /**
      * Crafts Tumblr link
      *
-     * @param string $url  URL to share
-     * @param string $text Text to add
+     * @param string $url         URL to share
+     * @param string $title       Title to use
+     * @param string $description Description to use
      *
      * @return string <a href="..."> content
      */
-    public function getTumblrLink($url, $text = '')
+    public function getTumblrLink($url, $title = '', $description = '')
     {
-        return 'http://tumblr.com/share?s&v=3&u='.rawurlencode($url).'&t='.$text.$this->appendHandler(640, 435);
+        return 'http://www.tumblr.com/share/link?url='.rawurlencode($url).'&amp;name='.$title.'&amp;description='.$description.$this->appendHandler(640, 435);
     }
 }
