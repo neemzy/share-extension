@@ -1,6 +1,6 @@
 <?php
 
-namespace ShareExtension;
+namespace Neemzy\Twig\Extension;
 
 class ShareExtension extends \Twig_Extension
 {
