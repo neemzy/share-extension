@@ -2,6 +2,14 @@
 
 Twig extension providing social share links
 
+## Why ?
+
+Using this library instead of widgets provided by social platforms will allow you to get rid of :
+
+- JavaScript execution timing issues
+- Appearance constraints
+- Abusive user tracking
+
 ## Installation
 
 ```
