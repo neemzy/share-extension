@@ -1,6 +1,6 @@
 # ShareExtension
 
-Twig extension providing social share links
+Twig extension providing social sharing links
 
 ## Why ?
 
