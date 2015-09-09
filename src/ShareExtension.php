@@ -2,34 +2,58 @@
 
 namespace Neemzy\Twig\Extension;
 
+use Doctrine\Common\Cache\PhpFileCache;
+use SocialShare\SocialShare;
+use SocialShare\Provider\Facebook;
+use SocialShare\Provider\Twitter;
+use SocialShare\Provider\Google;
+use SocialShare\Provider\Pinterest;
+
 class ShareExtension extends \Twig_Extension
 {
+    /** @var SocialShare */
+    private $socialShare;
+
     /**
-     * Twig extension name
-     *
-     * @return string Extension name
+     * @param SocialShare $socialShare
+     */
+    public function __construct(SocialShare $socialShare)
+    {
+        $this->socialShare = $socialShare;
+    }
+
+    public static function getInstance()
+    {
+        $socialShare = new SocialShare(new PhpFileCache(sys_get_temp_dir()));
+
+        $socialShare->registerProvider(new Twitter());
+        $socialShare->registerProvider(new Facebook());
+        $socialShare->registerProvider(new Pinterest());
+        $socialShare->registerProvider(new Google());
+
+        return new self($socialShare);
+    }
+
+    /**
+     * @return string
      */
     public function getName()
     {
         return 'share-extension';
     }
 
-
-
     /**
-     * Twig function declarations
-     *
-     * @return array Twig instances
+     * @return array
      */
     public function getFunctions()
     {
-        return array(
+        return [
             new \Twig_SimpleFunction('twitter', [$this, 'getTwitterLink'], ['is_safe' => ['all']]),
             new \Twig_SimpleFunction('facebook', [$this, 'getFacebookLink'], ['is_safe' => ['all']]),
             new \Twig_SimpleFunction('pinterest', [$this, 'getPinterestLink'], ['is_safe' => ['all']]),
             new \Twig_SimpleFunction('tumblr', [$this, 'getTumblrLink'], ['is_safe' => ['all']]),
-            new \Twig_SimpleFunction('googleplus', [$this, 'getGooglePlusLink'], ['is_safe' => ['all']])
-        );
+            new \Twig_SimpleFunction('google', [$this, 'getGoogleLink'], ['is_safe' => ['all']])
+        ];
     }
 
 
@@ -37,10 +61,10 @@ class ShareExtension extends \Twig_Extension
     /**
      * Appends onclick handler to the link to make it open a popup
      *
-     * @param int $width  Pop-up width
-     * @param int $height Pop-up height
+     * @param int $width
+     * @param int $height
      *
-     * @return string HTML to append to the link
+     * @return string
      */
     private function appendHandler($width, $height)
     {
@@ -50,55 +74,47 @@ class ShareExtension extends \Twig_Extension
 
 
     /**
-     * Crafts Twitter link
-     *
-     * @param string $url  URL to share
-     * @param string $text Text to tweet
+     * @param string $url
+     * @param string $text
      *
      * @return string <a href="..."> content
      */
     public function getTwitterLink($url, $text = '')
     {
-        return 'http://twitter.com/share?url='.rawurlencode($url).'&amp;text='.rawurlencode($text).$this->appendHandler(640, 435);
+        return $this->socialShare->getLink(Twitter::NAME, $url, compact('text')).$this->appendHandler(640, 435);
     }
 
 
 
     /**
-     * Crafts Facebook link
-     *
-     * @param string $url URL to share
+     * @param string $url
      *
      * @return string <a href="..."> content
      */
     public function getFacebookLink($url)
     {
-        return 'http://www.facebook.com/sharer/sharer.php?u='.rawurlencode($url).$this->appendHandler(640, 350);
+        return $this->socialShare->getLink(Facebook::NAME, $url).$this->appendHandler(640, 350);
     }
 
 
 
     /**
-     * Crafts Pinterest link
-     *
-     * @param string $url   URL to share
-     * @param string $media Media URL
+     * @param string $url
+     * @param string $media
      *
      * @return string <a href="..."> content
      */
     public function getPinterestLink($url, $media)
     {
-        return 'http://pinterest.com/pin/create/button/?url='.rawurlencode($url).'&amp;media='.rawurlencode($media).$this->appendHandler(750, 316);
+        return $this->socialShare->getLink(Pinterest::NAME, $url, compact('media')).rawurlencode($media).$this->appendHandler(750, 316);
     }
 
 
 
     /**
-     * Crafts Tumblr link
-     *
-     * @param string $url         URL to share
-     * @param string $title       Title to use
-     * @param string $description Description to use
+     * @param string $url
+     * @param string $title
+     * @param string $description
      *
      * @return string <a href="..."> content
      */
@@ -110,16 +126,14 @@ class ShareExtension extends \Twig_Extension
 
 
     /**
-     * Crafts Google+ link
-     *
-     * @param string $url         URL to share
-     * @param string $title       Title to use
-     * @param string $description Description to use
+     * @param string $url
+     * @param string $title
+     * @param string $description
      *
      * @return string <a href="..."> content
      */
-    public function getGooglePlusLink($url, $title = '', $description = '')
+    public function getGoogleLink($url, $title = '', $description = '')
     {
-        return 'https://plus.google.com/share?url='.rawurlencode($url).$this->appendHandler(640, 360);
+        return $this->socialShare->getLink(Google::NAME, $url).$this->appendHandler(640, 360);
     }
 }

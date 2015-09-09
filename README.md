@@ -2,9 +2,9 @@
 
 Twig extension providing social sharing links
 
-## Why ?
+## Why?
 
-Using this library instead of widgets provided by social platforms will allow you to get rid of :
+Using this library instead of widgets provided by social platforms will allow you to get rid of:
 
 - JavaScript execution timing issues
 - Appearance constraints
@@ -18,6 +18,12 @@ composer require neemzy/share-extension
 
 ## Usage
 
+```php
+use Neemzy\Twig\Extension\ShareExtension;
+
+$twig->addExtension(ShareExtension::getInstance());
+```
+
 ```twig
 <a href="{{ twitter(my_url, 'Some text') }}">Share on Twitter</a>
 <a href="{{ facebook(my_url) }}">Share on Facebook</a>
@@ -25,3 +31,7 @@ composer require neemzy/share-extension
 <a href="{{ tumblr(my_url, 'Some title', 'Some description') }}">Share on Tumblr</a>
 <a href="{{ googleplus(my_url) }}">Share on Google+</a>
 ```
+
+## Credits
+
+Written by [neemzy](http://neemzy.org). Proudly stands on the shoulders of [PHP SocialShare](https://github.com/dunglas/php-socialshare).
