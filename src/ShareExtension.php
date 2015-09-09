@@ -14,6 +14,17 @@ class ShareExtension extends \Twig_Extension
     /** @var SocialShare */
     private $socialShare;
 
+    const TWITTER_WIDTH = 640;
+    const TWITTER_HEIGHT = 435;
+    const FACEBOOK_WIDTH = 640;
+    const FACEBOOK_HEIGHT = 350;
+    const PINTEREST_WIDTH = 750;
+    const PINTEREST_HEIGHT = 316;
+    const TUMBLR_WIDTH = 640;
+    const TUMBLR_HEIGHT = 435;
+    const GOOGLE_WIDTH = 640;
+    const GOOGLE_HEIGHT = 360;
+
     /**
      * @param SocialShare $socialShare
      */
@@ -22,6 +33,9 @@ class ShareExtension extends \Twig_Extension
         $this->socialShare = $socialShare;
     }
 
+    /**
+     * @return ShareExtension
+     */
     public static function getInstance()
     {
         $socialShare = new SocialShare(new PhpFileCache(sys_get_temp_dir()));
@@ -68,7 +82,8 @@ class ShareExtension extends \Twig_Extension
      */
     private function appendHandler($width, $height)
     {
-        return '" onclick="window.open(this.href, \'\', \'directories=no,location=no,menubar=no,resizable=no,scrollbars=no,status=no,toolbar=no,width='.$width.',height='.$height.'\'); return false;';
+        return '" onclick="window.open(this.href, \'\', \'directories=no,location=no,menubar=no,resizable=no,scrollbars=no'.
+            ',status=no,toolbar=no,width='.$width.',height='.$height.'\'); return false;';
     }
 
 
@@ -81,7 +96,8 @@ class ShareExtension extends \Twig_Extension
      */
     public function getTwitterLink($url, $text = '')
     {
-        return $this->socialShare->getLink(Twitter::NAME, $url, compact('text')).$this->appendHandler(640, 435);
+        return $this->socialShare->getLink(Twitter::NAME, $url, compact('text')).
+            $this->appendHandler(TWITTER_WIDTH, TWITTER_HEIGHT);
     }
 
 
@@ -93,7 +109,8 @@ class ShareExtension extends \Twig_Extension
      */
     public function getFacebookLink($url)
     {
-        return $this->socialShare->getLink(Facebook::NAME, $url).$this->appendHandler(640, 350);
+        return $this->socialShare->getLink(Facebook::NAME, $url).
+            $this->appendHandler(FACEBOOK_WIDTH, FACEBOOK_HEIGHT);
     }
 
 
@@ -106,7 +123,8 @@ class ShareExtension extends \Twig_Extension
      */
     public function getPinterestLink($url, $media)
     {
-        return $this->socialShare->getLink(Pinterest::NAME, $url, compact('media')).rawurlencode($media).$this->appendHandler(750, 316);
+        return $this->socialShare->getLink(Pinterest::NAME, $url, compact('media')).rawurlencode($media).
+            $this->appendHandler(PINTEREST_WIDTH, PINTEREST_HEIGHT);
     }
 
 
@@ -120,7 +138,8 @@ class ShareExtension extends \Twig_Extension
      */
     public function getTumblrLink($url, $title = '', $description = '')
     {
-        return 'http://www.tumblr.com/share/link?url='.rawurlencode($url).'&amp;name='.$title.'&amp;description='.$description.$this->appendHandler(640, 435);
+        return 'http://www.tumblr.com/share/link?url='.rawurlencode($url).'&amp;name='.$title.'&amp;description='.$description.
+            $this->appendHandler(TUMBLR_WIDTH, TUMBLR_HEIGHT);
     }
 
 
@@ -134,6 +153,7 @@ class ShareExtension extends \Twig_Extension
      */
     public function getGoogleLink($url, $title = '', $description = '')
     {
-        return $this->socialShare->getLink(Google::NAME, $url).$this->appendHandler(640, 360);
+        return $this->socialShare->getLink(Google::NAME, $url).
+            $this->appendHandler(GOOGLE_WIDTH, GOOGLE_HEIGHT);
     }
 }
