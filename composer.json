@@ -17,7 +17,7 @@
 
     "autoload": {
         "psr-4": {
-            "Neemzy\\Twig\\Extension\\": "src/"
+            "Neemzy\\Twig\\Extension\\Share\\": "src/"
         }
     }
 }

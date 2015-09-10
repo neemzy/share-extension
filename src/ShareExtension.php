@@ -1,13 +1,16 @@
 <?php
 
-namespace Neemzy\Twig\Extension;
+namespace Neemzy\Twig\Extension\Share;
 
 use Doctrine\Common\Cache\PhpFileCache;
 use SocialShare\SocialShare;
 use SocialShare\Provider\Facebook;
-use SocialShare\Provider\Twitter;
 use SocialShare\Provider\Google;
+use SocialShare\Provider\LinkedIn;
 use SocialShare\Provider\Pinterest;
+use SocialShare\Provider\ScoopIt;
+use SocialShare\Provider\StumbleUpon;
+use SocialShare\Provider\Twitter;
 
 class ShareExtension extends \Twig_Extension
 {
@@ -40,10 +43,13 @@ class ShareExtension extends \Twig_Extension
     {
         $socialShare = new SocialShare(new PhpFileCache(sys_get_temp_dir()));
 
-        $socialShare->registerProvider(new Twitter());
         $socialShare->registerProvider(new Facebook());
-        $socialShare->registerProvider(new Pinterest());
         $socialShare->registerProvider(new Google());
+        $socialShare->registerProvider(new LinkedIn());
+        $socialShare->registerProvider(new Pinterest());
+        $socialShare->registerProvider(new ScoopIt());
+        $socialShare->registerProvider(new StumbleUpon());
+        $socialShare->registerProvider(new Twitter());
 
         return new self($socialShare);
     }
@@ -62,98 +68,70 @@ class ShareExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('twitter', [$this, 'getTwitterLink'], ['is_safe' => ['all']]),
-            new \Twig_SimpleFunction('facebook', [$this, 'getFacebookLink'], ['is_safe' => ['all']]),
-            new \Twig_SimpleFunction('pinterest', [$this, 'getPinterestLink'], ['is_safe' => ['all']]),
-            new \Twig_SimpleFunction('tumblr', [$this, 'getTumblrLink'], ['is_safe' => ['all']]),
-            new \Twig_SimpleFunction('google', [$this, 'getGoogleLink'], ['is_safe' => ['all']])
+            new \Twig_SimpleFunction('share_url_*', [$this, 'getShareLinkUrl']),
+            new \Twig_SimpleFunction('share_click_*', [$this, 'getShareLinkClickHandler']),
+            new \Twig_SimpleFunction('share_count_*', [$this, 'getShareCount'])
         ];
     }
 
+    /**
+     * @param string $provider
+     * @param array  $arguments
+     *
+     * @return string
+     * @throws \RuntimeException If requested provider is undefined
+     */
+    public function getShareLinkUrl($provider, array $arguments)
+    {
+        list($url, $options) = $arguments;
 
+        /** @see https://github.com/dunglas/php-socialshare/pull/20 */
+        if ('tumblr' == $provider) {
+            $shareUrl = 'http://www.tumblr.com/share/link?%s';
+            $options['url'] = $url;
+
+            return sprintf($shareUrl, http_build_query($options, null, '&'));
+        }
+
+        return $this->socialShare->getLink($provider, $url, $options);
+    }
 
     /**
-     * Appends onclick handler to the link to make it open a popup
-     *
-     * @param int $width
-     * @param int $height
+     * @param string $provider
      *
      * @return string
      */
-    private function appendHandler($width, $height)
+    public function getShareLinkClickHandler($provider)
     {
-        return '" onclick="window.open(this.href, \'\', \'directories=no,location=no,menubar=no,resizable=no,scrollbars=no'.
-            ',status=no,toolbar=no,width='.$width.',height='.$height.'\'); return false;';
+        $constantPrefix = get_class($this).'::'.strtoupper($provider);
+        $widthConstant = $constantPrefix.'_WIDTH';
+        $heightConstant = $constantPrefix.'_HEIGHT';
+
+        $handler = 'window.open(this.href, \'\', \'directories=no,location=no,menubar=no,scrollbars=no,status=no,toolbar=no';
+
+        if (defined($widthConstant)) {
+            $handler .= sprintf(',width=%s', constant($widthConstant));
+        }
+
+        if (defined($heightConstant)) {
+            $handler .= sprintf(',height=%s', constant($heightConstant));
+        }
+
+        $handler .= '\'); return false;';
+        return $handler;
     }
 
-
-
     /**
-     * @param string $url
-     * @param string $text
+     * @param string $provider
+     * @param array  $arguments
      *
-     * @return string <a href="..."> content
+     * @return int
+     * @throws \RuntimeException If requested provider is undefined
      */
-    public function getTwitterLink($url, $text = '')
+    public function getShareCount($provider, array $arguments)
     {
-        return $this->socialShare->getLink(Twitter::NAME, $url, compact('text')).
-            $this->appendHandler(TWITTER_WIDTH, TWITTER_HEIGHT);
-    }
+        list($url) = $arguments;
 
-
-
-    /**
-     * @param string $url
-     *
-     * @return string <a href="..."> content
-     */
-    public function getFacebookLink($url)
-    {
-        return $this->socialShare->getLink(Facebook::NAME, $url).
-            $this->appendHandler(FACEBOOK_WIDTH, FACEBOOK_HEIGHT);
-    }
-
-
-
-    /**
-     * @param string $url
-     * @param string $media
-     *
-     * @return string <a href="..."> content
-     */
-    public function getPinterestLink($url, $media)
-    {
-        return $this->socialShare->getLink(Pinterest::NAME, $url, compact('media')).rawurlencode($media).
-            $this->appendHandler(PINTEREST_WIDTH, PINTEREST_HEIGHT);
-    }
-
-
-
-    /**
-     * @param string $url
-     * @param string $title
-     * @param string $description
-     *
-     * @return string <a href="..."> content
-     */
-    public function getTumblrLink($url, $title = '', $description = '')
-    {
-        return 'http://www.tumblr.com/share/link?url='.rawurlencode($url).'&amp;name='.$title.'&amp;description='.$description.
-            $this->appendHandler(TUMBLR_WIDTH, TUMBLR_HEIGHT);
-    }
-
-
-
-    /**
-     * @param string $url
-     * @param string $title
-     * @param string $description
-     *
-     * @return string <a href="..."> content
-     */
-    public function getGoogleLink($url, $title = '', $description = '')
-    {
-        return $this->socialShare->getLink(Google::NAME, $url).
-            $this->appendHandler(GOOGLE_WIDTH, GOOGLE_HEIGHT);
+        return $this->socialShare->getShares($provider, $url);
     }
 }
