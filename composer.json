@@ -1,6 +1,7 @@
 {
     "name": "neemzy/share-extension",
     "description": "Twig extension providing social share links",
+    "license": "MIT",
     "minimum-stability": "dev",
 
     "authors": [
