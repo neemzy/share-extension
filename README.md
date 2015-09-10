@@ -25,7 +25,7 @@ You can also generate the contents for a `onclick` handler to make your sharing 
 Provider-specific parameters (e.g. tweet contents for Twitter) are supported: [see the list](https://github.com/dunglas/php-socialshare/blob/master/examples/buttons.php).
 
 ```php
-use Neemzy\Twig\Extension\ShareExtension;
+use Neemzy\Twig\Extension\Share\ShareExtension;
 
 // You can get a ready-to-use instance...
 $shareExtension = ShareExtension::getInstance();
@@ -38,7 +38,7 @@ $twig->addExtension($shareExtension);
 
 ```twig
 <a href="{{ share_url_facebook(my_url) }}">Share on Facebook</a>
-<a href="{{ share_url_twitter(my_url, { 'text': Some text' }) }}">Share on Twitter with some text</a>
+<a href="{{ share_url_twitter(my_url, { 'text': 'Some text' }) }}">Share on Twitter with some text</a>
 <a href="{{ share_url_google(my_url) }}" onclick="{{ share_click_google() }}">Share on Google+ in a popup</a>
 <div>Shared on Pinterest {{ share_count_pinterest(my_url) }} times.</div>
 ```
