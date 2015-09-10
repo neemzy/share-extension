@@ -1,7 +1,6 @@
 {
     "name": "neemzy/share-extension",
     "description": "Twig extension providing social share links",
-    "minimum-stability": "dev",
 
     "authors": [
         {
@@ -12,7 +11,7 @@
 
     "require": {
         "php": ">=5.4.0",
-        "dunglas/php-socialshare": "dev-master"
+        "dunglas/php-socialshare": "~0.2"
     },
 
     "autoload": {
