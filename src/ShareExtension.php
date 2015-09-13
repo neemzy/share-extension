@@ -76,15 +76,14 @@ class ShareExtension extends \Twig_Extension
 
     /**
      * @param string $provider
-     * @param array  $arguments
+     * @param string $url
+     * @param array  $options
      *
      * @return string
      * @throws \RuntimeException If requested provider is undefined
      */
-    public function getShareLinkUrl($provider, array $arguments)
+    public function getShareLinkUrl($provider, $url, array $options = array())
     {
-        list($url, $options) = $arguments;
-
         /** @see https://github.com/dunglas/php-socialshare/pull/20 */
         if ('tumblr' == $provider) {
             $shareUrl = 'http://www.tumblr.com/share/link?%s';
@@ -123,15 +122,13 @@ class ShareExtension extends \Twig_Extension
 
     /**
      * @param string $provider
-     * @param array  $arguments
+     * @param string $url
      *
      * @return int
      * @throws \RuntimeException If requested provider is undefined
      */
-    public function getShareCount($provider, array $arguments)
+    public function getShareCount($provider, $url)
     {
-        list($url) = $arguments;
-
         return $this->socialShare->getShares($provider, $url);
     }
 }
