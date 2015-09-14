@@ -129,6 +129,11 @@ class ShareExtension extends \Twig_Extension
      */
     public function getShareCount($provider, $url)
     {
+        /** @see https://github.com/dunglas/php-socialshare/pull/20 */
+        if ('tumblr' == $provider) {
+            return 0;
+        }
+
         return $this->socialShare->getShares($provider, $url);
     }
 }
