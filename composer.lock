@@ -4,11 +4,12 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "65a5ef6a4cba70c59ba67bd18c1fab28",
+    "hash": "ef06291d427cdf659a9be0e2a7fc2bb9",
+    "content-hash": "e2d01d736c141c5c44bcea61fc3505e9",
     "packages": [
         {
             "name": "doctrine/cache",
-            "version": "1.3.x-dev",
+            "version": "v1.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
@@ -77,16 +78,16 @@
         },
         {
             "name": "dunglas/php-socialshare",
-            "version": "dev-master",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dunglas/php-socialshare.git",
-                "reference": "ff367cfd96a74f4851c21c6056054d96b1072c7b"
+                "reference": "a80fb40be3f71e42624f05e79414cd3d248c6079"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dunglas/php-socialshare/zipball/ff367cfd96a74f4851c21c6056054d96b1072c7b",
-                "reference": "ff367cfd96a74f4851c21c6056054d96b1072c7b",
+                "url": "https://api.github.com/repos/dunglas/php-socialshare/zipball/a80fb40be3f71e42624f05e79414cd3d248c6079",
+                "reference": "a80fb40be3f71e42624f05e79414cd3d248c6079",
                 "shasum": ""
             },
             "require": {
@@ -114,21 +115,19 @@
                 }
             ],
             "description": "Retrieve social networks share counts and share links",
-            "homepage": "http://dunglas.fr",
+            "homepage": "https://dunglas.fr",
             "keywords": [
                 "count",
                 "share",
                 "social"
             ],
-            "time": "2015-04-03 08:30:15"
+            "time": "2015-11-16 23:29:15"
         }
     ],
     "packages-dev": [],
     "aliases": [],
-    "minimum-stability": "dev",
-    "stability-flags": {
-        "dunglas/php-socialshare": 20
-    },
+    "minimum-stability": "stable",
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

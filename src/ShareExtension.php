@@ -3,6 +3,7 @@
 namespace Neemzy\Twig\Extension\Share;
 
 use Doctrine\Common\Cache\PhpFileCache;
+use SocialShare\Exception\UnsupportedOperationException;
 use SocialShare\SocialShare;
 use SocialShare\Provider\Facebook;
 use SocialShare\Provider\Google;
@@ -10,6 +11,7 @@ use SocialShare\Provider\LinkedIn;
 use SocialShare\Provider\Pinterest;
 use SocialShare\Provider\ScoopIt;
 use SocialShare\Provider\StumbleUpon;
+use SocialShare\Provider\Tumblr;
 use SocialShare\Provider\Twitter;
 
 class ShareExtension extends \Twig_Extension
@@ -17,16 +19,16 @@ class ShareExtension extends \Twig_Extension
     /** @var SocialShare */
     private $socialShare;
 
-    const TWITTER_WIDTH = 640;
-    const TWITTER_HEIGHT = 435;
     const FACEBOOK_WIDTH = 640;
     const FACEBOOK_HEIGHT = 350;
+    const GOOGLE_WIDTH = 640;
+    const GOOGLE_HEIGHT = 360;
     const PINTEREST_WIDTH = 750;
     const PINTEREST_HEIGHT = 316;
     const TUMBLR_WIDTH = 640;
     const TUMBLR_HEIGHT = 435;
-    const GOOGLE_WIDTH = 640;
-    const GOOGLE_HEIGHT = 360;
+    const TWITTER_WIDTH = 640;
+    const TWITTER_HEIGHT = 435;
 
     /**
      * @param SocialShare $socialShare
@@ -84,14 +86,6 @@ class ShareExtension extends \Twig_Extension
      */
     public function getShareLinkUrl($provider, $url, array $options = array())
     {
-        /** @see https://github.com/dunglas/php-socialshare/pull/20 */
-        if ('tumblr' == $provider) {
-            $shareUrl = 'http://www.tumblr.com/share/link?%s';
-            $options['url'] = $url;
-
-            return sprintf($shareUrl, http_build_query($options, null, '&'));
-        }
-
         return $this->socialShare->getLink($provider, $url, $options);
     }
 
@@ -125,15 +119,11 @@ class ShareExtension extends \Twig_Extension
      * @param string $url
      *
      * @return int
-     * @throws \RuntimeException If requested provider is undefined
+     * @throws \RuntimeException             If requested provider is undefined
+     * @throws UnsupportedOperationException If called for an uncompatible provider
      */
     public function getShareCount($provider, $url)
     {
-        /** @see https://github.com/dunglas/php-socialshare/pull/20 */
-        if ('tumblr' == $provider) {
-            return 0;
-        }
-
         return $this->socialShare->getShares($provider, $url);
     }
 }
